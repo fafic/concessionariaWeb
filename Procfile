@@ -1,0 +1,1 @@
+web: java -jar lib/payara-micro-5.201.jar --deploy target/ConcWeb-1.0.war --port $PORT
