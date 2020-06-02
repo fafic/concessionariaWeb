@@ -39,7 +39,7 @@ public class GenerciService<T> {
       }
     }
     public List<T> getResultListNamedQuery(String query, Map<String,Object> parametros)throws Exception{
-        return (List<T>)createNamedQuery(query, parametros).getSingleResult();
+        return (List<T>)createNamedQuery(query, parametros).getResultList();
     }
 
     private Query createNamedQuery(String query, Map<String, Object> parametros)  {

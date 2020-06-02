@@ -4,32 +4,116 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+
       >
+
     <h:head>
         <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        <p:outputLabel value="GerCar" style="font-size: larger"/>
+        <style type="text/css">
+            .body-login{
+                background-image:url("resources/imagens/car_2.png");
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-attachment: fixed;
+            }
+        </style>
 
-        <h:form> 
-            <p:growl />
-            <h:panelGrid columns="2" cellspacing="2" cellpadding="2">
-                <p:outputLabel value="login" for="login"/>
-                <p:inputText value="#{loginMB.login}" 
-                             required="true" 
-                             id="login" 
-                             requiredMessage="O campo login é obrigatório"/>
-                <p:outputLabel value="senha" for="senha"/>
-                <p:password value="#{loginMB.senha}" 
-                               required="true" 
-                               id="senha" 
-                               requiredMessage="O campo senha é obrigatório"/>
-                <p:commandButton value="enviar"
-                                 update="@form"
-                                 actionListener="#{loginMB.logar()}"/>
-            </h:panelGrid>
-              
+
+    </h:head>
+
+
+    <h:body styleClass="body-login">
+
+
+        <h:form id="formLogin" prependId="false">
+            <p:growl id="msg"/>
+
+            <p:outputLabel value="FafiCar" 
+                           style="color: #ffffff; background-color: #2399e5; border-radius: 5px; font-size: 50px; font-weight: bolder; display: block; width: 100%; text-align: center; " 
+                           />  
+
+            <p:panel style="border: none; background-color: transparent; width: 400px; height: 300px; margin: 0 auto; text-align: center">
+
+                <h:panelGrid width="100%" style="text-align: center" columns="2" cellspacing="20" >
+
+                    <p:outputLabel style="color: #ffffff; font-size: 26px; font-weight: bolder" value="login" for="login"/>
+                    <p:inputText value="#{loginMB.login}" 
+                                 style="height: 25px;"
+                                 required="true" 
+                                 id="login" 
+                                 requiredMessage="O campo login é obrigatório"/>
+                    <p:outputLabel style="color: #ffffff; font-size: 26px; font-weight: bolder" value="senha" for="senha"/>
+                    <p:password value="#{loginMB.senha}"
+                                required="true"
+                                style="height: 25px;"
+                                id="senha" 
+                                requiredMessage="O campo senha é obrigatório"/>
+                </h:panelGrid>
+
+                <br/><br/>
+                <p:captcha label="Captcha" language="pt-BR" required="true" requiredMessage="O Captcha é obrigatório" />
+                <br/><br/>
+
+                <h:panelGrid width="100%" cellpadding="2" style="text-align: center">
+                    <p:commandButton value="acessar"
+                                     style="font-size: 25px; margin-top: 5%; margin-bottom: 5%"
+                                     update="msg login senha"
+                                     resetValues="true"
+                                     actionListener="#{loginMB.logar()}"/>
+
+
+
+                    <p:commandLink value="Esqueci minha senha"
+                                   style="color:#ffffff; font-size: 20px; font-weight: bolder"/>
+                </h:panelGrid>  
+
+
+
+
+            </p:panel>
+
         </h:form>
+
+        <p:dialog header="Redefinição de Senha" 
+                  resizable="false"
+                  widgetVar="dlgRedSenha">
+            <br/>
+            <p:outputLabel value="Você precisa redefinir sua senha!"/>
+            <br/>
+            <h:form id="formRedSenha" prependId="false">
+                <h:panelGrid columns="2" cellpadding="5" cellspacing="5">
+
+                    <p:outputLabel value="Nova Senha"/>
+                    <p:password value="#{loginMB.senha}"
+                                feedback="true"
+                                promptLabel="Digite sua senha"
+                                weakLabel="Fraca"
+                                goodLabel="Média"
+                                strongLabel="Forte"
+                                label="Digite sua senha"
+                                />
+
+                    <p:outputLabel value="Repita a senha"/>
+                    <p:password value="#{loginMB.senhaRepetida}"
+                                feedback="true"
+                                promptLabel="Digite sua senha"
+                                weakLabel="Fraca"
+                                goodLabel="Média"
+                                strongLabel="Forte"
+                                label="Digite sua senha"
+                                />
+
+                    <p:commandButton value="Atualizar senha"
+                                     actionListener="#{loginMB.updateSenha()}"
+                                     update="@form"/>
+
+                </h:panelGrid>
+            </h:form>
+
+        </p:dialog>
+
+
     </h:body>
+
 </html>
 

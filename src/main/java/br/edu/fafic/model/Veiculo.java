@@ -7,6 +7,7 @@ package br.edu.fafic.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,7 +27,9 @@ import javax.persistence.SequenceGenerator;
 @Entity
 @NamedQueries({
 @NamedQuery(name = "veiculoaByAno" , query =  "select v.modelo from Veiculo v where v.anoFabricacao=:ano"),
-@NamedQuery(name = "veiculos.getAll", query = "select v from Veiculo v")    
+@NamedQuery(name = "veiculos.getAll", query = "select v from Veiculo v"),
+@NamedQuery(name = "veiculo.byId" , query = "select v from Veiculo v where v.id=:id"),
+@NamedQuery(name = "veiculo.porMarca" , query  = "select v from Veiculo v where v.marca=:marca")
 })
 public class Veiculo implements Serializable {
     
@@ -44,6 +47,7 @@ public class Veiculo implements Serializable {
     private String anoFabricacao;
     @ManyToMany(mappedBy = "veiculos", cascade = CascadeType.ALL)
     private List<Acessorio> acessorios;
+    private String pathFile;
     
     
 
@@ -57,10 +61,11 @@ public class Veiculo implements Serializable {
         this.valor = valor;
         this.anoFabricacao = anoFabricacao;
     }
-    
-    
 
-   
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     
     public Long getId() {
         return id;
@@ -123,14 +128,48 @@ public class Veiculo implements Serializable {
     public void setAcessorios(List<Acessorio> acessorios) {
         this.acessorios = acessorios;
     }
-    
-    
+
+    public String getPathFile() {
+        return pathFile;
+    }
+
+    public void setPathFile(String pathFile) {
+        this.pathFile = pathFile;
+    }
 
     @Override
     public String toString() {
-        return "Veiculo{" + "marca=" + marca + ", modelo=" + modelo + ", placa=" + placa + ", valor=" + valor + ", pessoa=" + pessoa + ", anoFabricacao=" + anoFabricacao + '}';
+        return "Veiculo{" + "id=" + id + ", marca=" + marca + ", modelo=" + modelo + ", placa=" + placa + ", valor=" + valor + ", pessoa=" + pessoa + ", anoFabricacao=" + anoFabricacao + '}';
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 67 * hash + Objects.hashCode(this.marca);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Veiculo other = (Veiculo) obj;
+        if (!Objects.equals(this.marca, other.marca)) {
+            return false;
+        }
+        return true;
+    }
+
     
+
+      
     
     
 

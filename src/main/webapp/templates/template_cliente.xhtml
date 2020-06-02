@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Sistema Carros</title>
+        <h:outputStylesheet name="css/style.css"/>
+        
+    </h:head>
+    <h:body>
+        <h:form>  
+            <div style="background-color: #1f89ce; border-radius: 5px; height: 80px;">
+                <h2> <p:outputLabel value="Módulo Cliente" style="color: #ffffff; margin-left: 10px;"/></h2>
+            </div>
+            <hr/>
+            <p:growl id="messages"/>
+            <p:menubar>
+                <p:submenu label="Meu Cadastro" icon="pi pi-file">
+                    <p:menuitem value="Atualizar Dados" process="@this" url="loja.xhtml" />
+                    <p:separator />
+                    
+                </p:submenu>
+                <p:submenu label="Veículos" icon="pi pi-file">
+                    <p:menuitem value="Disponíveis" url="loja.xhtml" />
+                    <p:separator />
+                    <p:menuitem value="Financiamento" url="funcionario.xhtml?faces-redirect=true" />
+                    <p:separator />
+                    <p:menuitem value="Contato" url="cliente.xhtml" />
+                </p:submenu>
+
+                <f:facet name="options">
+                    <p:inputText style="margin:1px 10px 1px 1px;" placeholder="Buscar"/>
+
+                    <p:splitButton id="basic" value="#{loginMB.pessoaLogada().nome != null ? loginMB.pessoaLogada().nome : 'NÃO LOGADO'}">
+                        <p:menuitem value="Sair" action="#{loginMB.logout()}" />
+                        <p:menuitem value="Alterar senha"  url="/login.xhtml?faces-redirect=true" />
+                    </p:splitButton>  
+
+                </f:facet>
+            </p:menubar>
+        </h:form>
+        
+        <ui:insert name="conteudo">
+
+
+        </ui:insert>
+        <f:facet name="footer">
+            <p:outputLabel value="Área do Cliente"/>
+        </f:facet>
+    </h:body>
+</html>
+

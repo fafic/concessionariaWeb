@@ -31,5 +31,17 @@ public class VeiculoService extends GenerciService<Veiculo> {
         Query query = getEm().createNamedQuery("veiculos.getAll");
         return query.getResultList();
     }
-
+    
+    public Veiculo veiculoById(Long id){
+        Query query = getEm().createNamedQuery("veiculo.byId");
+        query.setParameter("id", id);
+        return (Veiculo) query.getSingleResult();
+    }
+    
+    public List<Veiculo> veiculoPorMarca(Veiculo veiculo){
+        Query query = getEm().createNamedQuery("veiculo.porMarca");
+        query.setParameter("marca", veiculo.getMarca());
+        return query.getResultList();
+    }
+   
 }

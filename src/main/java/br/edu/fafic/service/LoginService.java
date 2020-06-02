@@ -9,6 +9,7 @@ import br.edu.fafic.model.Pessoa;
 import java.util.HashMap;
 import java.util.Map;
 import javax.ejb.Stateless;
+import javax.persistence.Query;
 
 /**
  *
@@ -25,6 +26,13 @@ public class LoginService extends GenerciService<Pessoa> {
         parametros.put("senha", senha);
         return getSingleResultNamedQuery(Pessoa.PESSOA_BY_LOGIN, parametros);
     }
+    
+    public Pessoa getPessoaByLoginQuery(String dataNascimento) throws Exception{
+       Query q = em.createNamedQuery(Pessoa.PESSOA_BY_LOGIN);
+       q.setParameter("dataNascimento", dataNascimento);
+        return (Pessoa) q.getSingleResult();
+    }
+    
     
     
 }

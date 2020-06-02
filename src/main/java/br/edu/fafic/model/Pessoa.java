@@ -10,6 +10,7 @@ import br.edu.fafic.enums.TipoPessoa;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -55,7 +56,14 @@ public abstract class Pessoa implements Serializable {
     
     private String senha;
     
-
+    private String pathFoto;
+    
+    private String pathFile;
+    
+    private String telefone;
+    @Column(unique = true)
+    private String email;
+    
     public String getNome() {
         return nome;
     }
@@ -111,7 +119,42 @@ public abstract class Pessoa implements Serializable {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-        
+
+    public String getPathFoto() {
+        return pathFoto;
+    }
+
+    public void setPathFoto(String pathFoto) {
+        this.pathFoto = pathFoto;
+    }
+
+    public String getPathFile() {
+        return pathFile;
+    }
+
+    public void setPathFile(String pathFile) {
+        this.pathFile = pathFile;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        email = email.toLowerCase();
+        this.email = email;
+    }
+    
+    
+          
 
     @Override
     public int hashCode() {
@@ -135,7 +178,11 @@ public abstract class Pessoa implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.luciano.aulajpa.Pessoa[ id=" + id + " ]";
+        return "Pessoa{" + "nome=" + nome + ", endereco=" + endereco + ", login=" + login + '}';
     }
+    
+    
+
+   
     
 }

@@ -4,17 +4,244 @@
              xmlns:h="http://xmlns.jcp.org/jsf/html"
              xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
              template="/templates/template_admin.xhtml"
-              xmlns:p="http://primefaces.org/ui">
-   
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:f="http://xmlns.jcp.org/jsf/core">
+
     <br/>
+
+
     <ui:define name="conteudo">
-        <h2>  <p:outputLabel value="Cadastro de Clientes"/></h2>
-        
-        <h:form>
-            <p:outputLabel value="Nome" for="nome"/>
-            <p:inputText value="#{clienteMB.cliente.nome}" id="nome"/>
-        </h:form>
+        <h2><p:outputLabel value="Gerenciamento de Clientes"/></h2>
+
+        <p:panel id="panelBody" style="border: none !important">
+
+            <h:form id="formDataTableClientes" rendered="#{clienteMB.renderedDataTableClientes}">
+
+                <p:commandButton value="Cadastrar" 
+                                 process="@this" 
+                                 update="panelBody"
+                                 actionListener="#{clienteMB.setRenderedDataTableClientes(false)}"
+                                 />
+
+                <br/><br/>
+                
+                    <p:dataTable value="#{clienteMB.clientesLazy}" 
+                                 paginatorPosition="bottom"
+                                 id="dataTableClientes"
+                                 rows="10"
+                                 lazy="true"
+                                 paginator="true"  
+                                 var="cliente">
+                        <f:facet name="header">
+                            Lista de Clientes
+                        </f:facet>
+
+                        <p:column headerText="Nome">
+                            <h:outputText value="#{cliente.nome}" id="nomeCliente"/> 
+
+                            <p:tooltip for="nomeCliente" rendered="#{cliente.pathFoto !=  null}">
+                                <p:graphicImage name="/imagens/#{cliente.pathFoto}"
+                                                width="200"
+                                                height="200"/>
+                            </p:tooltip>
+
+                        </p:column>
+                        <p:column headerText="CPF" width="150">
+                            <h:outputText value="#{cliente.cpf}"  />
+                        </p:column>
+                        <p:column headerText="Rua">
+                            <h:outputText value="#{cliente.endereco.logradouro}"  />
+                            
+                        </p:column>
+                        <p:column headerText="Número" width="50px;">
+                            <h:outputText value="#{cliente.endereco.numero}"  />
+                            
+                        </p:column>
+                        <p:column headerText="Bairro" width="80">
+                            <h:outputText value="#{cliente.endereco.bairro}"  />
+                            
+                        </p:column>
+                        <p:column headerText="Cidade" width="100">
+                            <h:outputText value="#{cliente.endereco.localidade}"  />
+                            
+                        </p:column>
+                        <p:column headerText="Ação" width="300px" exportable="false">
+                            <p:commandButton value="editar" 
+                                             actionListener="#{clienteMB.prepareUpdateCliente(cliente)}"
+                                             process="@form"
+                                             update="panelBody"/>
+
+                            <p:commandButton value="Download"
+                                             ajax="false"
+                                             actionListener="#{clienteMB.setCliente(cliente)}"
+                                             disabled="#{cliente.pathFile eq null}">
+
+                                <p:fileDownload value="#{clienteMB.fileDownload}"/>
+
+                            </p:commandButton>
+
+                        </p:column>
+
+                    </p:dataTable>
+                
+                <br/>
+                
+                <h3>Exportar Dados</h3>
+              
+                <h:commandLink>
+                    <p:graphicImage name="images/pdf.png"/>
+                    <p:dataExporter type="pdf"
+                                    target="dataTableClientes"
+                                    fileName="clientes-pdf"/>
+                </h:commandLink>
+                
+                <h:commandLink>
+                    <p:graphicImage name="images/csv.png"/>
+                    <p:dataExporter type="csv"
+                                    target="dataTableClientes"
+                                    fileName="clientes-csv"/>
+                </h:commandLink>
+                
+
+
+            </h:form>
+
+
+            <h:form prependId="false" rendered="#{clienteMB.renderedFormFoto}">
+
+                <h:panelGrid columns="2" cellspacing="5px">
+
+                    <p:panel header="Captura da Foto">
+                        <p:photoCam widgetVar="pc" height="200" width="200" listener="#{clienteMB.oncapture}"/>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Capturar Foto"
+                                             onclick="PF('pc').capture();"
+                                             process="@this"
+                                             update="panelFotoCapturada"
+                                             />
+
+                        </f:facet>
+                    </p:panel> 
+                    <p:panel id="panelFotoCapturada" header="Foto Capturada" style="width: 300px; height: 300px;">
+
+                        <p:graphicImage name="/imagens/#{clienteMB.cliente.pathFoto}"
+                                        height="150"
+                                        width="150"
+                                        rendered="#{clienteMB.cliente.pathFoto != null}"/>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Confirmar"
+                                             update="fotoUser"
+                                             process="@this"/>
+                        </f:facet>
+
+
+                    </p:panel>
+
+
+                </h:panelGrid>  
+
+            </h:form>
+
+            <br/>
+
+
+            <h:form prependId="false" id="formCadastro" rendered="#{!clienteMB.renderedDataTableClientes}">
+
+                <p:panel id="dadosPessoais" header="Dados Pessoais">
+
+
+                    <h:panelGrid columns="2" cellspacing="2" >
+
+                        <p:panel id="fotoUser" header="Foto" style="width: 200px; text-align: center">
+
+                            <p:outputPanel id="panelFotoUsuer">
+                                <p:graphicImage name="/imagens/#{clienteMB.cliente.pathFoto}"
+                                                height="150"
+                                                width="150"
+                                                rendered="#{clienteMB.cliente.pathFoto != null}"/>
+
+                                <p:graphicImage name="/imagens/avatar.png"
+                                                rendered="#{clienteMB.cliente.pathFoto == null}"/>
+                            </p:outputPanel>
+
+                            <p:commandButton value="Alterar Foto"
+                                             actionListener="#{clienteMB.setRenderedFormFoto(true)}"
+                                             update="panelBody"
+                                             process="@this"/>
+
+                        </p:panel>
+                        <h:panelGrid columns="2" cellspacing="2"  cellpadding="10" >
+                            <p:outputLabel value="Nome" for="nome"/>
+                            <p:inputText value="#{clienteMB.cliente.nome}" id="nome" style="width: 450px"/>
+                            <p:outputLabel value="CPF" for="cpf"/>
+                            <p:inputMask mask="999.999.999-99" value="#{clienteMB.cliente.cpf}" id="cpf" />
+                            <p:outputLabel value="Sexo: "/>
+                            <p:selectOneRadio value="#{clienteMB.sexo}">
+                                <f:selectItems value="#{clienteMB.genero}"/>
+                            </p:selectOneRadio> 
+                        </h:panelGrid>
+
+                    </h:panelGrid>
+                </p:panel>
+
+                <br/><br/>
+                <p:panel id="panelEndereco"  header="Endereço">
+                    <h:panelGrid columns="2" cellspacing="2"  cellpadding="10">
+                        <p:outputLabel value="CEP" for="cep"/>
+                        <p:inputMask mask="99.999-999" value="#{clienteMB.cliente.endereco.cep}" id="cep">
+                            <p:ajax event="blur" 
+                                    listener="#{clienteMB.buscaEndereco()}"
+                                    process="cep"
+                                    update="panelEndereco"/>
+                        </p:inputMask>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4" cellpadding="11">
+                        <p:outputLabel value="Rua" for="rua" />
+                        <p:inputText value="#{clienteMB.cliente.endereco.logradouro}" id="rua" style="width: 300px;"/>
+                        <p:outputLabel value="Número" for="numero" />
+                        <p:inputText value="#{clienteMB.cliente.endereco.numero}" id="numero" style="width: 50px;" />
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="6" cellpadding="5" cellspacing="5">
+                        <p:outputLabel value="Bairro" for="bairro"/>
+                        <p:inputText value="#{clienteMB.cliente.endereco.bairro}" id="bairro"/>
+                        <p:outputLabel value="Cidade" for="localidade"/>
+                        <p:inputText value="#{clienteMB.cliente.endereco.localidade}" id="localidade" style="width: 250px;"/>
+                        <p:outputLabel value="Estado" for="estado"/>
+                        <p:inputText value="#{clienteMB.cliente.endereco.uf}" id="estado" style="width: 50px;" />
+                    </h:panelGrid>
+
+                </p:panel>
+
+                <br/><br/>
+
+                <p:panel id="panelContato" header="Contato">
+                    <h:panelGrid columns="2" cellpadding="2">
+                        <p:outputLabel value="Telefone"/>
+                        <p:inputMask mask="(99)99999-9999" value="#{clienteMB.cliente.telefone}"/>
+                        <p:outputLabel value="Email"/>
+                        <p:inputText value="#{clienteMB.cliente.email}"/>
+                    </h:panelGrid>
+                </p:panel>
+
+
+                <br/><br/>
+
+                <p:commandButton value="cadastrar" 
+                                 actionListener="#{clienteMB.save()}"
+                                 process="@form"
+                                 update="panelBody"
+                                 />
+
+            </h:form>
+
+        </p:panel>  
+
+
+
     </ui:define>
-    
+
 </ui:decorate>
 

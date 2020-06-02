@@ -27,6 +27,11 @@ public class Endereco implements Serializable {
     private String localidade;
     private String complemento;
     private String uf;
+    private String cep;
+    private String unidade;
+    private String ibge;
+    private String gia;
+    
 
     public Long getId() {
         return id;
@@ -80,6 +85,46 @@ public class Endereco implements Serializable {
         this.uf = uf;
     }
 
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+       this.cep = cep.replaceAll("[./-]", "");
+    }
+
+    public String getUnidade() {
+        return unidade;
+    }
+
+    public void setUnidade(String unidade) {
+        this.unidade = unidade;
+    }
+
+    public String getIbge() {
+        return ibge;
+    }
+
+    public void setIbge(String ibge) {
+        this.ibge = ibge;
+    }
+
+    public String getGia() {
+        return gia;
+    }
+
+    public void setGia(String gia) {
+        this.gia = gia;
+    }
+    
+
+    @Override
+    public String toString() {
+        return "Rua: " +this.logradouro + " Cep: " +this.cep + " Cidade: " +this.localidade +  " Nº: " +this.numero + " UF: " +this.uf;
+    }
+    
+    
+ 
   
     
     

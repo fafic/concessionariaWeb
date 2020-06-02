@@ -14,7 +14,7 @@
         <br/>
 
         <p:panel id="conteudo" style="border: none !important">
-            <h:form id="formCadastro" rendered="#{veiculoMB.renderedInit}">
+            <h:form id="formCadastro" prependId="false" rendered="#{veiculoMB.renderedInit}" enctype="multipart/form-data">
 
                 <p:commandButton value="Ver todos"
                                  actionListener="#{veiculoMB.setRenderedInit(false)}"
@@ -34,20 +34,44 @@
                     <p:outputLabel value="Valor"/>
                     <p:inputText value="#{veiculoMB.veiculo.valor}" required="true" requiredMessage="O valor é obrigatório"/>
                     <p:outputLabel value="Placa"/>
-                    <p:inputMask style="text-transform: uppercase !important" value="#{veiculoMB.veiculo.placa}" mask="aaa-9999" required="true" requiredMessage="A placa é obrigatória"/>
-                        
-                   
+                    <p:inputText value="#{veiculoMB.veiculo.placa}"
+                                 id="inputPlaca"
+                                 required="true" 
+                                 requiredMessage="A placa é obrigatória">
+                        <p:ajax event="keyup" 
+                                process="inputPlaca" 
+                                update="inputPlaca"
+                                listener="#{veiculoMB.placaUpperCase()}"/>
+                    </p:inputText>
+
 
                 </h:panelGrid> 
                 <br/>
-               
+
                 <p:commandButton value="salvar" 
                                  actionListener="#{veiculoMB.save()}"
                                  update="conteudo"
                                  process="@form"
                                  />
-               
+
                 <p:commandButton value="limpar" resetValues="true" update="@form" process="@this"/>
+
+                <br/><br/>
+
+                <p:panel header="Estudando Sessão">
+                    <h:panelGrid columns="2" cellspacing="2" cellpadding="2">
+                        <p:outputLabel value="Escopo de visão :"/>
+                        <p:outputLabel value="#{veiculoMB.veiculo.modelo}"/>
+                        <p:outputLabel value="Escopo de sessão :"/>
+                        <p:outputLabel value="#{loginMB.pessoaLogada().nome}"/>
+                    </h:panelGrid>
+
+                </p:panel>
+                <br/>
+                <p:commandButton value="Ir para página 1" action="pagina_1.xhtml?faces-redirect=true"/>
+
+
+
             </h:form>
             <br/>
             <h:form prependId="false" rendered="#{!veiculoMB.renderedInit}" id="tableVeiculos">
@@ -59,12 +83,30 @@
                                  actionListener="#{veiculoMB.setRenderedInit(true)}"/>
                 <br/>
                 <br/>
-                <p:dataTable value="#{veiculoMB.veiculos()}" var="veiculo" style="border-left: none !important; border-right: none !important">
+                 
+                <p:selectOneMenu id="selectVeiculo" value="#{veiculoMB.veiculoSelecionado}"
+                                 converter="veiculoConverter"
+                                 >
+                    <f:selectItem noSelectionOption="true" itemLabel="Selecione" itemValue=""/>
+                    <f:selectItems value="#{veiculoMB.itensVeiculo()}"/>
+                </p:selectOneMenu>
+                
+                <p:commandButton value="Pesquisar" 
+                                 style="margin-left: 6px;"
+                                 actionListener="#{veiculoMB.veiculosPorMarca()}"
+                                 process="@this selectVeiculo"
+                                 update="dtVeiculos"/>
+                
+                <br/>
+                <br/>
+               
+               
+                <p:dataTable id="dtVeiculos" value="#{veiculoMB.veiculos}" var="veiculo" style="border-left: none !important; border-right: none !important">
                     <f:facet name="header">
                         Lista de Veículos
                     </f:facet>
 
-                    <p:column headerText="Marca">
+                    <p:column headerText="Marca" filterBy="#{veiculo.marca}" filterMatchMode="contains" >
                         #{veiculo.marca}
                     </p:column>
                     <p:column headerText="Modelo">
@@ -85,13 +127,19 @@
                                          process="@this"
                                          styleClass="btn-excluir"
                                          action="#{veiculoMB.prepareRemoveVeiculo(veiculo)}"
-                                        /> 
-                             
-                        
+                                         /> 
+
+
+
                     </p:column>
 
 
                 </p:dataTable>
+
+                <br/><br/>
+
+
+
 
             </h:form>
 

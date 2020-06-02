@@ -25,4 +25,20 @@
         <param-name>primefaces.THEME</param-name>
         <param-value>omega</param-value>
     </context-param>
+    <context-param>
+        <param-name>fish.payara.faces.enableParallelInit</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>primefaces.PRIVATE_CAPTCHA_KEY</param-name>
+        <param-value>6LeUvvUUAAAAABvkIdDyjHbpyjDnG4bYJKM7Zyym</param-value>
+    </context-param>
+    <context-param>
+        <param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
+        <param-value>6LeUvvUUAAAAAMdvWygwpN0m8rLrV1RHR61lmYuP</param-value>
+    </context-param>
+    
+    
+    
+   
 </web-app>
