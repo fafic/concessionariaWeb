@@ -122,9 +122,6 @@
                             <goal>copy</goal>
                         </goals>
                         <configuration>
-                            <processTypes>
-                                <web>java $JAVA_OPTS -cp target/classes:target/dependency/* Main</web>
-                            </processTypes>
                             <outputDirectory>${endorsed.dir}</outputDirectory>
                             <silent>true</silent>
                             <artifactItems>
