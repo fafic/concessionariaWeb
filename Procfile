@@ -1,1 +1,1 @@
-web: java -jar lib/payara-micro-5.201.jar --deploy target/*.war --port $PORT
+web: java -jar lib/payara-micro-5.201.jar --deploy target/*.war 
